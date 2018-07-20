@@ -6,9 +6,10 @@
  * Time: 13:24
  */
 include_once 'interface/RequestFactoryInterface.php';
+
 class RequestFactory implements RequestFactoryInterface
 {
-    public function build($address, $data): RequestInterface
+    public function build($address, $data, $bool): RequestInterface
     {
         $request = new Request();
         $request->setAddress($address);

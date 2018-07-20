@@ -8,5 +8,5 @@
 
 interface RequestFactoryInterface
 {
-    public function build(string $address,array $data):RequestInterface;
+    public function build(string $address, array $data, bool $post): RequestInterface;
 }

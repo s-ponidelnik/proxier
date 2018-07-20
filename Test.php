@@ -11,6 +11,6 @@ include_once 'Parser.php';
 include_once 'Request.php';
 include_once 'RequestFactory.php';
 
-$parser = new Parser(new Curl(),new RequestFactory());
-$response = $parser->parse('https://www.bing.com/search');
-var_dump($response);
+
+$searcher = new BingSearcher(new Parser(new Curl(), new RequestFactory()));
+$searcher->search(['test']);
