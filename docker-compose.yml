@@ -1,0 +1,46 @@
+version: '2.2'
+services:
+  bing_parse:
+    container_name: spider_bing_parse
+    build: ./docker/php-fpm
+    working_dir: /var/www/bing_parse
+    restart: always
+    ports:
+      - "9000"
+    volumes:
+      - ./bing_parse:/var/www/bing_parse
+      - ./var/log/php-fpm:/var/log/php-fpm
+      - ./bing_parse/tmp/sessions:/tmp/var/sessions
+    env_file:
+      - ./bing_parse/.env
+    links:
+      - mysql
+      - rabbitmq
+    depends_on:
+      - mysql
+      - rabbitmq
+  proxy_starage:
+    container_name: spider_proxy_storage
+    image: mysql:8.0
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3306"
+    env_file:
+      - ./spider_proxy_storage.env
+    volumes:
+      - ./spider_proxy_storage/var/lib/mysql:/var/lib/mysql
+      - ./spider_proxy_storage/var/log/mysql:/var/log/mysql
+      - ./spider_proxy_storage/etc/mysql/dump:/docker-entrypoint-initdb.d
+  rabbitmq:
+    container_name: spider_rabbitmq
+    image: rabbitmq
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "15672"
+      - "5672"
+    volumes:
+      - ./var/lib/rabbitmq:/var/lib/rabbitmq
+      - ./var/log/rabbitmq:/var/log/rabbitmq
